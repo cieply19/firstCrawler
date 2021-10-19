@@ -5,7 +5,8 @@ import csv, datetime
 response = requests.get("https://e-kursy-walut.pl/")
 soup = BeautifulSoup(response.text, 'html.parser')
 
-crypto = ('Dupa', 'Bitcoin', 'Ethereum', 'Cardano', 'Binance Coin', 'Solana', 'BitTorrent', 'Ripple', 'Litecoin', 'Iota')
+crypto = (
+'Dupa', 'Bitcoin', 'Ethereum', 'Cardano', 'Binance Coin', 'Solana', 'BitTorrent', 'Ripple', 'Litecoin', 'Iota')
 
 rows = []
 for x in crypto:
@@ -15,15 +16,17 @@ for x in crypto:
         usd_rate = soup.find(text=x).next_element.small.text
         pln_rate = soup.find(text=x).next_element.strong.text
 
-        rows.append([x, usd_rate, pln_rate, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
-
+        rows.append({'Nazwa waluty': x, 'Kurs USD': usd_rate, 'Kurs PLN': pln_rate,
+                     'Data + Czas pobrania kursu': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")})
 
 # zapis do pliku csv
 
-filename = r'c:\temp\kursy.csv'
+filename = 'kursy.csv'
 fields = ['Nazwa waluty', 'Kurs USD', 'Kurs PLN', 'Data + Czas pobrania kursu']
 
-with open(filename, 'w') as csvfile:
-    csvwriter = csv.writer(csvfile)
-    csvwriter.writerow(fields)
+with open(filename, 'a') as csvfile:
+    csvwriter = csv.DictWriter(csvfile, ('Nazwa waluty', 'Kurs USD', 'Kurs PLN', 'Data + Czas pobrania kursu'))
+    if not csvfile.tell():
+        csvwriter.writeheader()
+
     csvwriter.writerows(rows)
