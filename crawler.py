@@ -21,7 +21,7 @@ for x in crypto:
 # zapis do pliku csv
 
 filename = r'c:\temp\kursy.csv'
-fields = ['Nazwa waluty', 'Kurs PLN', 'Kurs USD', 'Data + Time']
+fields = ['Nazwa waluty', 'Kurs USD', 'Kurs PLN', 'Data + Czas pobrania kursu']
 
 with open(filename, 'w') as csvfile:
     csvwriter = csv.writer(csvfile)
