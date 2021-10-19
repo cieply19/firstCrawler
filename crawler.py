@@ -5,14 +5,18 @@ import csv, datetime
 response = requests.get("https://e-kursy-walut.pl/")
 soup = BeautifulSoup(response.text, 'html.parser')
 
-crypto = ('Bitcoin', 'Ethereum', 'Cardano', 'Binance Coin', 'Solana', 'BitTorrent', 'Ripple', 'Litecoin', 'Iota')
+crypto = ('Dupa', 'Bitcoin', 'Ethereum', 'Cardano', 'Binance Coin', 'Solana', 'BitTorrent', 'Ripple', 'Litecoin', 'Iota')
 
 rows = []
 for x in crypto:
-    usd_rate = soup.find(text=x).next_element.small.text
-    pln_rate = soup.find(text=x).next_element.strong.text
+    if not soup.find(text=x):
+        continue
+    else:
+        usd_rate = soup.find(text=x).next_element.small.text
+        pln_rate = soup.find(text=x).next_element.strong.text
 
-    rows.append([x, usd_rate, pln_rate, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        rows.append([x, usd_rate, pln_rate, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+
 
 # zapis do pliku csv
 
